@@ -1,0 +1,15 @@
+{
+  "system_name": "Edge_Biometrics_MVP",
+  "version": "1.0.3",
+  "environment": "production",
+  "audio_settings": {
+    "sample_rate_hz": 44100,
+    "channels": 1,
+    "vad_threshold_energy": 1000
+  },
+  "threshold_dtw": 70.5,
+  "paths": {
+    "master_voices_dir": "Records/MasterVoices",
+    "temp_recordings_dir": "Records/Temp"
+  }
+}
