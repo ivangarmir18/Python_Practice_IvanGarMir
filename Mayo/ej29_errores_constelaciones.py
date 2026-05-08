@@ -35,11 +35,6 @@ def generar_flujo_datos(cantidad=250):
 
 datos_entrada = generar_flujo_datos()
 
-
-# =====================================================================
-# TU MISIÓN EMPIEZA AQUÍ: COMPLETAR LAS 4 FUNCIONES VACÍAS
-# =====================================================================
-
 def inicializar_base_datos(conexion):
     cursor = conexion.cursor()
     cursor.execute("CREATE TABLE IF NOT EXISTS registro_errores (timestamp TEXT, coord_x REAL, coord_y REAL, esperado TEXT, detectado TEXT);")
