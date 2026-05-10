@@ -1,0 +1,49 @@
+import numpy as np
+
+def modula_16qam_manual(bits_fuente):
+    
+    bits_fuente = np.asarray(bits_fuente)
+    k = 4
+    a = 1 / np.sqrt(10)
+
+    b0 = bits_fuente[0::k]
+    b1 = bits_fuente[1::k]
+    b2 = bits_fuente[2::k]
+    b3 = bits_fuente[3::k]
+
+    I = np.empty(len(bits_fuente) // 4)
+    Q = np.empty(len(bits_fuente) // 4)
+
+    I[(b0 == 0) & (b1 == 0)] = 3
+    I[(b0 == 0) & (b1 == 1)] = 1
+    I[(b0 == 1) & (b1 == 1)] = -1
+    I[(b0 == 1) & (b1 == 0)] = -3
+
+    Q[(b2 == 0) & (b3 == 0)] = 3
+    Q[(b2 == 0) & (b3 == 1)] = 1
+    Q[(b2 == 1) & (b3 == 1)] = -1
+    Q[(b2 == 1) & (b3 == 0)] = -3
+
+    simbolos = I + 1j * Q
+    return simbolos * a
+
+
+if __name__ == "__main__":
+
+    bits_prueba = np.array([0, 0, 1, 1, 0, 1, 1, 0])
+    
+    print("Bits de entrada: ", bits_prueba)
+    
+    simbolos = modula_16qam_manual(bits_prueba)
+    
+    print("\nSímbolos generados:")
+    print(simbolos)
+
+    a = 1 / np.sqrt(10)
+    simbolos_esperados = np.array([
+        (3*a) + 1j*(-1*a),
+        (1*a) + 1j*(-3*a)
+    ])
+    
+    print("\nSímbolos esperados (matemáticamente correctos):")
+    print(simbolos_esperados)
