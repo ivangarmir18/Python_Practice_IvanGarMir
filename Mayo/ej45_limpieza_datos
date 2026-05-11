@@ -1,0 +1,57 @@
+import numpy as np
+
+def procesar_telemetria(datos_crudos):
+    
+    resumen_maquinas = {}
+    for log in datos_crudos:
+        maquina = log.get("maquina")
+        temp = log.get("temp")
+        estado = log.get("estado")
+
+        if not isinstance(temp, float) or temp > 100 or temp < 0 or estado == "fallo":
+            if maquina not in resumen_maquinas:
+                resumen_maquinas[maquina] = {"temp_media": [], "errores_totales": 1}
+            else:
+                resumen_maquinas[maquina]["errores_totales"] += 1
+        else:
+            if maquina not in resumen_maquinas:
+                resumen_maquinas[maquina] = {"temp_media": [temp], "errores_totales": 0}
+            else:
+                resumen_maquinas[maquina]["temp_media"].append(temp)
+
+    
+    for maquina, datos in resumen_maquinas.items():
+        if len(datos["temp_media"]) > 0:
+            datos["temp_media"] = round(np.mean(datos["temp_media"]).item(), 2)
+        else:
+            datos["temp_media"] = 0.0
+
+    return resumen_maquinas
+
+if __name__ == "__main__":
+    # DATOS SUCIOS DEL SERVIDOR
+    lecturas_iot = [
+        {"maquina": "M1", "temp": 45.2, "estado": "activo"},
+        {"maquina": "M2", "temp": "ERROR_REDF", "estado": "fallo"},
+        {"maquina": "M1", "temp": 46.1, "estado": "activo"},
+        {"maquina": "M3", "temp": 1500.0, "estado": "activo"}, # Outlier (fuera de 0-100)
+        {"maquina": "M2", "temp": 38.5, "estado": "activo"},
+        {"maquina": "M1", "estado": "activo"}, # Falta la clave 'temp'
+        {"maquina": "M3", "temp": 40.0, "estado": "activo"},
+        {"maquina": "M1", "temp": -10.0, "estado": "activo"} # Outlier
+    ]
+    
+    print("--- PROCESANDO TELEMETRÍA ---")
+    resultados = procesar_telemetria(lecturas_iot)
+    
+    print("\nResultados obtenidos:")
+    for maq, datos in resultados.items():
+        print(f"{maq}: {datos}")
+
+    try:
+        assert resultados["M1"]["temp_media"] == 45.65 and resultados["M1"]["errores_totales"] == 2
+        assert resultados["M2"]["temp_media"] == 38.5 and resultados["M2"]["errores_totales"] == 1
+        assert resultados["M3"]["temp_media"] == 40.0 and resultados["M3"]["errores_totales"] == 1
+        print("\n✅ ¡PRUEBA SUPERADA! Has limpiado el dataset como un Data Engineer profesional.")
+    except (KeyError, AssertionError):
+        print("\n❌ FALLO TÉCNICO. Los diccionarios no tienen la estructura correcta o las mates fallan.")

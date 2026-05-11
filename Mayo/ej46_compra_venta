@@ -1,0 +1,40 @@
+def ganancia_maxima(precios):
+       
+    if not precios or len(precios) < 2:
+        return 0
+
+    precio_minimo = precios[0]
+    max_ganancia = 0
+
+    for precio in precios:
+
+        if precio < precio_minimo:
+            precio_minimo = precio
+
+        ganancia_hoy = precio - precio_minimo
+
+        if max_ganancia < ganancia_hoy:
+            max_ganancia = ganancia_hoy
+
+    return max_ganancia
+
+if __name__ == "__main__":
+    
+    print("--- TEST DE RENDIMIENTO: MOTOR DE TRADING ---")
+    
+    precios_dia_1 = [7, 1, 5, 3, 6, 4]
+    res_1 = ganancia_maxima(precios_dia_1)
+    print(f"Caso 1 - Esperado: 5 | Obtenido: {res_1}")
+    
+    precios_dia_2 = [7, 6, 4, 3, 1]
+    res_2 = ganancia_maxima(precios_dia_2)
+    print(f"Caso 2 - Esperado: 0 | Obtenido: {res_2}")
+    
+    precios_dia_3 = [2, 4, 10, 1, 2, 9]
+    res_3 = ganancia_maxima(precios_dia_3)
+    print(f"Caso 3 - Esperado: 7 | Obtenido: {res_3}")
+    
+    if res_1 == 5 and res_2 == 0 and res_3 == 7:
+        print("\n✅ ¡PRUEBA SUPERADA! La lógica financiera es impecable.")
+    else:
+        print("\n❌ FALLO TÉCNICO. Las ganancias calculadas no son óptimas.")
