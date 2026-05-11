@@ -1,31 +1,15 @@
-# =====================================================================
-# RETO 47: PRUEBA TÉCNICA FINTECH (Búsqueda Eficiente)
-# Tiempo límite sugerido: 30 minutos
-# =====================================================================
-
 def encontrar_transacciones(transacciones, objetivo):
-    """
-    OBJETIVO:
-    Encontrar los ÍNDICES de las dos transacciones que suman exactamente 
-    el valor 'objetivo'.
-    
-    PISTA LÓGICA:
-    Si el objetivo es 9 y estás mirando el número 2... sabes matemáticamente 
-    que necesitas un 7. 
-    ¿Y si usas un diccionario como "memoria" para ir guardando los números 
-    que ya has visto y sus índices, y en cada paso compruebas si el número 
-    que necesitas ya está en esa memoria?
-    """
-    
-    # --- TU LÓGICA AQUÍ ---
-    
-    
-    
-    
-    
-    
-    # ----------------------
-    return []
+
+    diccionario = {}
+    for i, transaccion in enumerate(transacciones):
+        busqueda = [[i, indice] for indice, dato in diccionario.items() if dato + transaccion == objetivo]
+        
+        if busqueda:
+            indices_objetivo = busqueda[0]
+            break
+        diccionario[i] = transaccion
+
+    return sorted(indices_objetivo) if indices_objetivo else []
 
 if __name__ == "__main__":
     
